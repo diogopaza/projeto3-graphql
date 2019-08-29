@@ -1,0 +1,36 @@
+type Produto{
+    id: ID!
+    nome: String!
+}
+
+type Cliente{
+    id: ID!
+    nome: String!
+}
+
+type Item{
+    id: ID!
+    quantidade: Int!
+    valor: Float!
+    produto: Produto!
+}
+
+type Pedido{
+    id: ID!
+    cliente: Cliente!
+    itens: [Item!]!    
+
+}
+
+type Endereco {
+    id: ID!
+    rua: String!
+}
+
+type Query{
+    Produtos:[Produto]
+    Pedidos:[Pedido]
+    Clientes:[Cliente]
+    Itens:[Item]
+
+}
