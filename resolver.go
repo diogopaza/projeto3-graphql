@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"projeto3/models"
+	"projeto3/proto"
+
+	"google.golang.org/grpc"
 ) // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
 
 type Resolver struct{}
@@ -37,11 +40,32 @@ func (r *queryResolver) Pedidos(ctx context.Context) ([]*models.Pedido, error) {
 	}
 	return lista, nil
 }
+
+/*
 func (r *queryResolver) Clientes(ctx context.Context) ([]*models.Cliente, error) {
 	fmt.Println("Clientes")
 	lista := []*models.Cliente{&models.Cliente{ID: "1", Nome: "Jose"},
 		&models.Cliente{ID: "2", Nome: "Joao"},
 	}
+	return lista, nil
+}
+*/
+func (r *queryResolver) Clientes(ctx context.Context) ([]*models.Cliente, error) {
+	fmt.Println("Estou graphql Clientes")
+
+	var cliente = &proto.RequisicaoCliente{Id: 1, Nome: "JoseGraphql"}
+
+	lista := []*models.Cliente{&models.Cliente{ID: "1", Nome: "Jose"},
+		&models.Cliente{ID: "2", Nome: "Joao"},
+	}
+
+	conn, err := grpc.Dial("localhost:4040", grpc.WithInsecure())
+	if err != nil {
+		panic(err)
+	}
+	client := proto.NewAddServiceClienteClient(conn)
+	req, err := client.VerCliente(ctx, cliente)
+	fmt.Println(req)
 	return lista, nil
 }
 
